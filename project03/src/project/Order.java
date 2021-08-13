@@ -29,6 +29,16 @@ public class Order {
     // 취소함수에서 입력양식 맞나 안맞나 확인 + 음식 취소할 때 사용할 변수
     static int outterDelete;
 
+    // 사장님 메뉴판 수정하는 함수에서 입력양식 맞나 안맞나 확인하는 함수
+    static  int outterMenuModifySelect;
+
+    // guest1의 음식 선택한 배열
+    static String[] guest1MenuBox = new String[0];
+
+    // guest2의 음식 선택한 배열
+    static String[] guest2MenuBox = new String[0];
+
+
     //=========================================
     //++++++++++사장님, 손님 구분 로그인++++++++++
     //손님 계정 아이디 확인 후 존재하면 폼으로 이동
@@ -53,6 +63,15 @@ public class Order {
                         //로그인 성공
                         System.out.println(nickArr[idx] + "님 환영합니다!\n");
 
+                        // 로그인 별로 음식을 담을 수 있게 배열을 생성
+                        if (nickArr[idx] == "밥그릇") {
+                            String[] guest1 = new String[0];
+                            guest1MenuBox = guest1;
+
+                        } else if (nickArr[idx] == "숟가락") {
+                            String[] guest2 = new String[0];
+                            guest2MenuBox = guest2;
+                        }
                         //손님 폼으로 이동
                         guestForm();
                         break;
@@ -77,6 +96,24 @@ public class Order {
 
     // 메뉴선택 함수
     static void menuSelect() {
+
+
+        /*
+          ///////////////////////// 두개로 나누는 코드 ///////////////////////////////////
+                // 기존의 menuBox가 들어간 코드에 이런식으로 해줘야함!
+
+         // 기존의 menuBox가 들어간 코드에 이런식으로 해줘야함!
+         System.out.println("음식을 주문하기 위해 사용자 이름을 입력하세요");
+        System.out.print(">> ");
+        String userName = sc.next();
+        sc.nextLine();
+
+        System.out.println(" ");
+        System.out.println("확인이 완료되었습니다.");
+        System.out.println(" ");
+         */
+
+
         // 선택한 음식을 보관하는 배열
         String[] selectFood = new String[0];
 
@@ -145,7 +182,24 @@ public class Order {
                 selectFood = temp;
                 menuBox = selectFood;
                 temp = null;
-            }
+
+                /*
+                ///////////////////////// 두개로 나누는 코드 ///////////////////////////////////
+                // 기존의 menuBox가 들어간 코드에 이런식으로 해줘야함!
+                if (userName.equals("밥그릇")) {
+                    temp[temp.length - 1] = food;
+                    selectFood = temp;
+                    guest1MenuBox = selectFood;
+                    temp = null;
+                } else if (userName.equals("숟가락")) {
+                    temp[temp.length - 1] = food;
+                    selectFood = temp;
+                    guest2MenuBox = selectFood;
+                    temp = null;
+                }
+
+                 */
+            }// end if
         } // end while
     } // end menuSelect
 
@@ -190,7 +244,7 @@ public class Order {
     // 주문후 수정, 삭제, 그대로 주문 기능이 있는 함수
     static void menuModifyDelete() {
         while (true) {
-            System.out.println("1. 주문메뉴 수정하기 2. 주문메뉴 취소하기 3. 이대로 주문하기");
+            System.out.println("1. 주문메뉴 수정하기 / 2. 주문메뉴 취소하기 / 3. 이대로 주문하기");
             System.out.print(">> ");
             int deleteOrOrder = sc.nextInt();
             outterDelete = deleteOrOrder;
@@ -435,7 +489,100 @@ public class Order {
     //+++++++++++++사장님 전용 폼++++++++++++++
     //=======================================
 
-    //사장님 폼 - 신규 주문서 확인함수
+
+    //사장님 폼 - 1. 메뉴판 수정하기
+    static void menuModify() {
+        while(true) {
+            System.out.println("***** 현재 메뉴판 *****");
+            for (int i = 0; i < badInput.length; i++) {
+                System.out.println(badInput[i] + " - " + outterCost[i] + "원");
+            }
+
+            System.out.println(" ");
+            System.out.println("1. 메뉴 추가하기 / 2. 메뉴 수정하기 / 3. 메뉴 삭제하기");
+            System.out.print(">> ");
+            int menuModifySelect = sc.nextInt();
+            outterMenuModifySelect = menuModifySelect;
+            sc.nextLine();
+
+            // 1, 2, 3이 아니면 다시 입력하도록 하는 작업
+            if (menuModifySelect == 1 || menuModifySelect == 2 || menuModifySelect == 3) {
+                break;
+            } else {
+                System.out.println(" ");
+                System.out.println("입력 양식에 맞게 입력하세요!!");
+                System.out.println(" ");
+            }
+
+        }
+        
+        switch (outterMenuModifySelect) {
+            case 1:
+                System.out.println(" ");
+                System.out.println("추가할 메뉴를 입력하세요.");
+                System.out.print(">> ");
+                String addMenu = sc.next();
+                sc.nextLine();
+                System.out.println(" ");
+
+
+                // 새로운 메뉴를 담는 배열
+                String[] addMenuTemp = new String[badInput.length + 1];
+
+                // 배열을 옮기는 작업
+                for (int i = 0; i < badInput.length ; i++) {
+                    addMenuTemp[i] = badInput[i];
+                }
+
+                addMenuTemp[addMenuTemp.length-1] = addMenu;
+                badInput = addMenuTemp;
+                addMenuTemp = null;
+
+                // 새로운 메뉴 가격 설정하는 작업
+                System.out.println(" ");
+                System.out.println("추가할 메뉴의 가격을 입력하세요.");
+                System.out.print(">> ");
+                int addMenuCost = sc.nextInt();
+                sc.nextLine();
+                System.out.println(" ");
+
+                // 새로운 메뉴의 가격을 담는 배열
+                int[] addMenuCostTemp = new int[outterCost.length + 1];
+
+                // 배열을 옮기는 작업
+                for (int i = 0; i < outterCost.length ; i++) {
+                    addMenuCostTemp[i] = outterCost[i];
+                }
+
+                addMenuCostTemp[addMenuCostTemp.length-1] = addMenuCost;
+                outterCost = addMenuCostTemp;
+                addMenuCostTemp = null;
+
+
+                //최종 확인 출력\
+                System.out.println("***** 새로운 메뉴가 메뉴판에 등록되었습니다!!!! *****");
+                System.out.println(" ");
+                for (int i = 0; i < badInput.length; i++) {
+                    System.out.println(badInput[i] + " - " + outterCost[i] + "원");
+                }
+                System.out.println(" ");
+
+                
+                break; //switch1 break
+            
+            case 2:   
+                
+                break; //switch2 break
+            
+            case 3:
+                
+                break; //switch3 break
+        }
+    }
+
+
+
+    //사장님 폼 - 2. 신규 주문서 확인함수
     //주문 취소 시 메인 폼으로 돌아간다.
     static void OrderView() {
         if (menuBox.length > 0) {
@@ -506,8 +653,7 @@ public class Order {
 
         switch (menu) {
             case 1:
-                System.out.println("1. 메뉴판 수정이 메뉴판 배열이 없어서 불가능");
-                System.out.println("");
+                menuModify();
                 masterForm();
                 break;
             case 2:
