@@ -30,7 +30,7 @@ public class Order {
     static int outterDelete;
 
     // 사장님 메뉴판 수정하는 함수에서 입력양식 맞나 안맞나 확인하는 함수
-    static  int outterMenuModifySelect;
+    static int outterMenuModifySelect;
 
     // guest1의 음식 선택한 배열
     static String[] guest1MenuBox = new String[0];
@@ -297,51 +297,67 @@ public class Order {
                         System.out.println("주문을 진행합니다!");
                         System.out.println(" ");
                         break;
+                    } else {
+                        System.out.println(" 존재하지 않는 음식입니다. 확인 후 다시 입력바랍니다.");
+                        continue;
                     }
                 }
-                break;
+                break; // switch break;
 
             // 기존음식을 삭제하는 기능
             case 2:
-                System.out.println(Arrays.toString(menuBox));
-                System.out.println("취소하고 싶은 음식을 골라 주세요!");
-                System.out.print(">>");
-                String deleteFood = sc.next();
-                sc.nextLine();
+                while (true) {
+                    System.out.println(" ");
+                    System.out.println(Arrays.toString(menuBox));
+                    System.out.println("취소하고 싶은 음식을 골라 주세요!");
+                    System.out.print(">>");
+                    String deleteFood = sc.next();
+                    sc.nextLine();
 
 
-                int idx = -1;
+                    int idx = -1;
 
-                for (int i = 0; i < menuBox.length; i++) {
-                    if (menuBox[i].equals(deleteFood)) {
-                        idx = i;
-                        break;
+                    for (int i = 0; i < menuBox.length; i++) {
+                        if (menuBox[i].equals(deleteFood)) {
+                            idx = i;
+                            break;
+                        }
                     }
-                }
-                // 탐색 후에 배열안에 있으면 앞으로 옮기는 작업
-                if (idx != -1) {
+                    // 탐색 후에 배열안에 있으면 앞으로 옮기는 작업
+                    if (idx != -1) {
 
-                    for (int i = idx; i < menuBox.length - 1; i++) {
-                        menuBox[i] = menuBox[i + 1];
-                        break;
+                        for (int i = idx; i < menuBox.length - 1; i++) {
+                            menuBox[i] = menuBox[i + 1];
+                            break;
+                        }
+
+                        // 새로운 배열 생성
+                        String[] deleteTemp = new String[menuBox.length - 1];
+
+                        // 새로운 배열에 삭제된 배열을 넣는 작업
+                        for (int i = 0; i < deleteTemp.length; i++) {
+                            deleteTemp[i] = menuBox[i];
+                        }
+
+                        menuBox = deleteTemp;
+                        deleteTemp = null;
+
+                        break; // while break;
+
+                    } else {
+                        System.out.println(" 존재하지 않는 음식입니다. 확인 후 다시 입력바랍니다.");
+                        continue;
                     }
-                }
-                // 새로운 배열 생성
-                String[] deleteTemp = new String[menuBox.length - 1];
 
-                // 새로운 배열에 삭제된 배열을 넣는 작업
-                for (int i = 0; i < deleteTemp.length; i++) {
-                    deleteTemp[i] = menuBox[i];
-                }
 
-                menuBox = deleteTemp;
-                deleteTemp = null;
+                }
 
                 System.out.println(" ");
                 System.out.println("주문하신 음식: " + Arrays.toString(menuBox));
                 System.out.println("주문을 진행합니다!");
                 System.out.println(" ");
-                break;
+
+                break; // switch break;
 
             // 기존음식을 그대로 주문하는 기능
             case 3:
@@ -349,7 +365,7 @@ public class Order {
                 System.out.println("주문하신 음식: " + Arrays.toString(menuBox));
                 System.out.println("주문을 진행합니다!");
                 System.out.println(" ");
-                break;
+                break; // switch break;
 
         }
     } // end menuModifyDelete
@@ -492,7 +508,7 @@ public class Order {
 
     //사장님 폼 - 1. 메뉴판 수정하기
     static void menuModify() {
-        while(true) {
+        while (true) {
             System.out.println("***** 현재 메뉴판 *****");
             for (int i = 0; i < badInput.length; i++) {
                 System.out.println(badInput[i] + " - " + outterCost[i] + "원");
@@ -515,7 +531,7 @@ public class Order {
             }
 
         }
-        
+
         switch (outterMenuModifySelect) {
             case 1:
                 System.out.println(" ");
@@ -530,11 +546,11 @@ public class Order {
                 String[] addMenuTemp = new String[badInput.length + 1];
 
                 // 배열을 옮기는 작업
-                for (int i = 0; i < badInput.length ; i++) {
+                for (int i = 0; i < badInput.length; i++) {
                     addMenuTemp[i] = badInput[i];
                 }
 
-                addMenuTemp[addMenuTemp.length-1] = addMenu;
+                addMenuTemp[addMenuTemp.length - 1] = addMenu;
                 badInput = addMenuTemp;
                 addMenuTemp = null;
 
@@ -550,36 +566,134 @@ public class Order {
                 int[] addMenuCostTemp = new int[outterCost.length + 1];
 
                 // 배열을 옮기는 작업
-                for (int i = 0; i < outterCost.length ; i++) {
+                for (int i = 0; i < outterCost.length; i++) {
                     addMenuCostTemp[i] = outterCost[i];
                 }
 
-                addMenuCostTemp[addMenuCostTemp.length-1] = addMenuCost;
+                addMenuCostTemp[addMenuCostTemp.length - 1] = addMenuCost;
                 outterCost = addMenuCostTemp;
                 addMenuCostTemp = null;
 
 
                 //최종 확인 출력\
-                System.out.println("***** 새로운 메뉴가 메뉴판에 등록되었습니다!!!! *****");
+                System.out.println("***** 변경된 메뉴판 *****");
                 System.out.println(" ");
                 for (int i = 0; i < badInput.length; i++) {
                     System.out.println(badInput[i] + " - " + outterCost[i] + "원");
                 }
                 System.out.println(" ");
 
-                
+
                 break; //switch1 break
-            
-            case 2:   
-                
+
+            case 2:
+                while (true) {
+                    System.out.println(" ");
+                    System.out.println("변경하고 싶은 메뉴를 입력해 주세요!");
+                    System.out.print(">> ");
+                    String modifyFoodMenu = sc.next();
+                    sc.nextLine();
+
+                    int idx = -1;
+
+                    for (int i = 0; i < badInput.length; i++) {
+                        if (badInput[i].equals(modifyFoodMenu)) {
+                            idx = i;
+                            break;
+                        }
+                    }
+
+
+                    if (idx != -1) {
+                        System.out.println(" ");
+                        System.out.println("어떤 음식으로 변경하시겠습니까?");
+                        System.out.print(">> ");
+                        String changeMenuFood = sc.next();
+                        sc.nextLine();
+
+                        badInput[idx] = changeMenuFood;
+
+
+                        System.out.println(" ");
+                        System.out.println("변경할 음식의 가격을 설정하세요.");
+                        System.out.print(">> ");
+                        int changeMenuCost = sc.nextInt();
+                        sc.nextLine();
+
+                        outterCost[idx] = changeMenuCost;
+                        break;
+                    } else {
+                        System.out.println(" ");
+                        System.out.println(" 존재하지 않는 음식입니다. 확인 후 다시 입력바랍니다.");
+                        continue;
+                    }
+                }
+
+                System.out.println(" ");
+                System.out.println("메뉴판이 변경되었습니다!!");
+                System.out.println(" ");
+                System.out.println("***** 변경된 메뉴판 *****");
+                for (int i = 0; i < badInput.length; i++) {
+                    System.out.println(badInput[i] + " - " + outterCost[i] + "원");
+                }
+                System.out.println(" ");
+
                 break; //switch2 break
-            
+
             case 3:
-                
+                while (true) {
+                    System.out.println(" ");
+                    System.out.println("삭제할 메뉴를 입력하세요.");
+                    System.out.print(">> ");
+                    String eraseMenu = sc.next();
+                    sc.nextLine();
+                    System.out.println(" ");
+
+
+                    // 삭제 작업
+                    int idx = -1;
+
+                    for (int i = 0; i < badInput.length; i++) {
+                        if (badInput[i].equals(eraseMenu)) {
+                            idx = i;
+                            break;
+                        }
+                    }
+
+                    if (idx != -1) {
+
+                        for (int i = idx; i < badInput.length - 1; i++) {
+                            badInput[i] = badInput[i + 1];
+
+                        }
+                    } else {
+                        System.out.println(" 존재하지 않는 음식입니다. 확인 후 다시 입력바랍니다.");
+                        continue;
+                    }
+
+                    String[] eraseMenuTemp = new String[badInput.length - 1];
+
+
+                    for (int i = 0; i < eraseMenuTemp.length; i++) {
+                        eraseMenuTemp[i] = badInput[i];
+                    }
+
+                    badInput = eraseMenuTemp;
+                    eraseMenuTemp = null;
+
+                    break; // while break;
+                }
+
+                System.out.println(" ");
+                System.out.println("***** 변경된 메뉴판 *****");
+                for (int i = 0; i < badInput.length; i++) {
+                    System.out.println(badInput[i] + " - " + outterCost[i] + "원");
+                }
+                System.out.println(" ");
+
                 break; //switch3 break
         }
     }
-
 
 
     //사장님 폼 - 2. 신규 주문서 확인함수
@@ -667,11 +781,11 @@ public class Order {
                 masterForm();
                 break;
             case 4:
-                System.out.println("3. 로그아웃");
+                System.out.println("4. 로그아웃");
                 login();
                 break;
             case 5:
-                System.out.println("4. 프로그램 종료");
+                System.out.println("5. 프로그램 종료");
                 break;
         }
     }
