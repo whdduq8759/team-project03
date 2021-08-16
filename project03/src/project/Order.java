@@ -139,7 +139,7 @@ public class Order {
             foods = food;
             sc.nextLine();
 
-            if (food.equals("선택완료")) {
+            if (food.equals("선택완료")) { // 선택완료 입력시 종료
                 boolean flag = selectYesOrNo(selectFood, totalCost);
                 //***
                 if (flag) {
@@ -154,21 +154,51 @@ public class Order {
                     totalCost = 0;
                     continue;
                 }
-            } else if (food.equals("짜장면")) {
-                totalCost += 5000;
-            } else if (food.equals("짬뽕")) {
-                totalCost += 6000;
-            } else if (food.equals("볶음밥")) {
-                totalCost += 7000;
-            } else if (food.equals("탕수육")) {
-                totalCost += 12000;
-            } else if (food.equals("칠리새우")) {
-                totalCost += 30000;
-            } else if (!food.equals(badInput)) {
-                System.out.println("잘못 입력하셨습니다. 위에 메뉴판을 보시고 다시 입력해주시기 바랍니다.");
+            } else if (!food.equals("선택완료")) { // 다른 것을 입력했을 때 가격이 총가격 변수에 담는 것
+                for (int i = 0; i < badInput.length; i++) {
+                    if (food.equals(badInput[i])) {
+                        totalCost += outterCost[i];
+                    }
+                }
             }
 
-            // 선택한 음식들이 메누판에 있는 음식이면 배열에 담는 작업 (메뉴판에 없는 음식이면 배열에 담지 않음)
+            // 기존
+        /*
+        } else if (food.equals("짜장면")) {
+            totalCost += 5000;
+        } else if (food.equals("짬뽕")) {
+            totalCost += 6000;
+        } else if (food.equals("볶음밥")) {
+            totalCost += 7000;
+        } else if (food.equals("탕수육")) {
+            totalCost += 12000;
+        } else if (food.equals("칠리새우")) {
+            totalCost += 30000;
+        } else {
+            System.out.println("잘못 입력하셨습니다. 위에 메뉴판을 보시고 다시 입력해주시기 바랍니다.");
+        }
+         */
+
+
+            // 선택한 음식을 배열에 넣는 것
+            for (int i = 0; i < badInput.length; i++) {
+                if (food.equals(badInput[i])) {
+                    String[] temp = new String[selectFood.length + 1];
+                    for (i = 0; i < selectFood.length; i++) {
+                        temp[i] = selectFood[i];
+                    }
+                    temp[temp.length - 1] = food;
+                    selectFood = temp;
+                    menuBox = selectFood;
+                    temp = null;
+                    break;
+                }
+            }
+
+
+            // 기존
+                /*
+                 // 선택한 음식들이 메누판에 있는 음식이면 배열에 담는 작업 (메뉴판에 없는 음식이면 배열에 담지 않음)
             if (food.equals(badInput[0]) || food.equals(badInput[1]) || food.equals(badInput[2]) || food.equals(badInput[3]) || food.equals(badInput[4])) {
                 // selectFood의 음식들을 넣는 새로운 배열
                 String[] temp = new String[selectFood.length + 1];
@@ -182,6 +212,10 @@ public class Order {
                 selectFood = temp;
                 menuBox = selectFood;
                 temp = null;
+                 */
+
+
+
 
                 /*
                 ///////////////////////// 두개로 나누는 코드 ///////////////////////////////////
@@ -199,8 +233,8 @@ public class Order {
                 }
 
                  */
-            }// end if
         } // end while
+
     } // end menuSelect
 
     //주문 최종 확인
@@ -286,7 +320,7 @@ public class Order {
                     if (idx != -1) {
                         System.out.println(" ");
                         System.out.println("어떤 음식으로 바꾸시겠습니까?");
-                        System.out.println("***** 짜장면, 짬뽕, 볶음밥, 탕수육, 칠리새우 *****");
+                        System.out.println(Arrays.toString(badInput));
                         System.out.print(">> ");
                         String changeFood = sc.next();
                         sc.nextLine();
